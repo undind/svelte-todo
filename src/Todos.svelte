@@ -2,7 +2,7 @@
   import TodoItem from "./TodoItem.svelte";
 
   let newTodoTitle = "";
-  let curentFilter = "All";
+  let currentFilter = "All";
   let nextId = 4;
 
   let todos = [
@@ -63,7 +63,66 @@
   function handleDeleteTodo(event) {
     todos = todos.filter(todo => todo.id !== event.detail.id);
   }
+
+  function handleToggleComplete(event) {
+    const todoIndex = todos.findIndex(todo => todo.id === event.detail.id);
+    const updatedTodo = {
+      ...todos[todoIndex],
+      completed: !todos[todoIndex].completed
+    };
+    todos = [
+      ...todos.slice(0, todoIndex),
+      updatedTodo,
+      ...todos.slice(todoIndex + 1)
+    ];
+  }
 </script>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 10px auto;
+  }
+
+  .todo-input {
+    width: 100%;
+    padding: 10px, 20px;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .inner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    border-top: 1px solid lightgrey;
+    padding-top: 15px;
+    margin-bottom: 13px;
+  }
+
+  .inner-container-input {
+    margin-right: 12px;
+  }
+
+  button {
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+  }
+
+  button:hover {
+    background: lightseagreen;
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  .active {
+    background: lightseagreen;
+  }
+</style>
 
 <div class="div container">
   <h2>Svelte Todo App</h2>
@@ -101,17 +160,17 @@
     <div>
       <button
         on:click={() => updateFilter('all')}
-        class:active={curentFilter === 'all'}>
+        class:active={currentFilter === 'all'}>
         All
       </button>
       <button
         on:click={() => updateFilter('active')}
-        class:active={curentFilter === 'active'}>
+        class:active={currentFilter === 'active'}>
         Active
       </button>
       <button
         on:click={() => updateFilter('completed')}
-        class:active={curentFilter === 'completed'}>
+        class:active={currentFilter === 'completed'}>
         Completed
       </button>
     </div>
